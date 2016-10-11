@@ -1,15 +1,20 @@
 package com.home;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Amarendra Kumar on 10/10/2016.
  */
+@Entity
 public class Customer implements Serializable{
 
     private static final long serialVersionUID = -4022984273924922929L;
 
+    @Id
     private Long id;
     private String name;
     private Date dob;

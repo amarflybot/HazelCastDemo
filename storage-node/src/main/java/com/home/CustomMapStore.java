@@ -2,6 +2,7 @@ package com.home;
 
 import com.hazelcast.core.MapStore;
 import com.home.dao.CustomerDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,7 +16,9 @@ import java.util.stream.StreamSupport;
  */
 public class CustomMapStore implements MapStore<Long, Customer>{
 
-        private CustomerDao customerDao;
+    @Autowired
+    private CustomerDao customerDao;
+
     @Override
     public void store(Long key, Customer value) {
         customerDao.save(value);
