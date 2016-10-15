@@ -8,6 +8,7 @@ import com.home.Customer;
 import com.home.factory.StorageNodeFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,7 @@ public class CustomerServiceTest {
         List<Customer> customers = new ArrayList<>();
 
 
-        Date date = simpleDateFormat.parse("1988/01/01");
+        Date date = simpleDateFormat.parse("1980/01/01");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -117,7 +118,29 @@ public class CustomerServiceTest {
         storageNodeFactory.ensureClusterSize(0); // Shutdown all storage nodes
 
         storageNodeFactory.ensureClusterSize(3); //Start another 3 storage nodes
+        IMap<Long, Customer> customerMap1 = hazelcastInstance.getMap(CustomerService.CUSTOMERS_MAP);
+        assertEquals(maxCustomers, customerMap1.size());
+    }
 
-        assertEquals(maxCustomers, customerMap.size());
+    @Test
+    public void testSearchCustomerWithDob() throws ParseException {
+        customerService.addCustomers(generateCustomers(10));
+
+        Date startDate = simpleDateFormat.parse("1980/01/01");
+        Date endDate = simpleDateFormat.parse("1982/01/01");
+
+        Collection<Customer> customers = customerService.findCustomer(startDate, endDate);
+        assertEquals(2, customers.size());
+    }
+
+    @Test
+    public void testFindCustomersByEmail() throws ParseException {
+        customerService.addCustomers(generateCustomers(10));
+
+        Collection<Customer> customersByEmail = customerService.findCustomersByEmail("Customer0@gmail.com");
+        assertEquals(1, customersByEmail.size());
+        List<Customer> customers = generateCustomers(1);
+        assertEquals(customers.get(0), customersByEmail.iterator().next());
+        System.out.printf("");
     }
 }

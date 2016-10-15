@@ -3,6 +3,7 @@ package com.home;
 import com.hazelcast.core.MapStore;
 import com.home.dao.CustomerDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +15,8 @@ import java.util.stream.StreamSupport;
 /**
  * Created by V691139 on 10/10/2016.
  */
-public class CustomMapStore implements MapStore<Long, Customer>{
+@Service
+public class CustomersMapStore implements MapStore<Long, Customer>{
 
     @Autowired
     private CustomerDao customerDao;
